@@ -9,7 +9,7 @@ def obter_conexao():
     servidor = '.\SQLEXPRESS'
     banco    = 'Aulas_BD'
     usuario  = 'sa'
-    senha    = 'Senha@123' # poder ser também: "senha", "senha@123", "Senha@123"
+    senha    = 'Senha@123' # poder ser também: "senha", "senha@123", "Senha@123" se for no lab06 "12345"
 
     # realiza conexao com o BD
     string_conexao = f'Driver={driver};Server={servidor};Database={banco};UID={usuario};PWD={senha}'
@@ -24,9 +24,9 @@ def home(request):
     template = 'home.html'
     return render(request, template)
 
-def exercicio_1(request):
+def questao_3a(request):
     # define a página HTML (template) que deverá será carregada
-    template = 'exercicio_1.html'
+    template = 'questao_3a.html'
     try:
         # obtem a conexao com o BD
         conexao = obter_conexao()
@@ -62,9 +62,9 @@ def exercicio_1(request):
         return render(request, template, context={'ERRO': err})
 
 
-def exercicio_2(request):
+def questao_3b(request):
     # define a página HTML (template) que deverá será carregada
-    template = 'exercicio_2.html'
+    template = 'questao_3b.html'
     try:
         # obtem a conexao com o BD
         conexao = obter_conexao()
@@ -98,83 +98,4 @@ def exercicio_2(request):
     except Exception as err:
         return render(request, template, context={'ERRO': err})
 
-
-def exercicio_3(request):
-    # define a página HTML (template) que deverá será carregada
-    template = 'exercicio_3.html'
-    try:
-        # obtem a conexao com o BD
-        conexao = obter_conexao()
-
-        # define um cursor para executar comandos SQL
-        #cursor realiza comandos SQL e retornam para o código
-        cursor = conexao.cursor()
-
-        # define o comando SQL que será executado
-        sql = '''
-            SELECT  es.nome as 'Estado',
-                    cd.nome as 'Cidade',
-                    br.nome
-
-            FROM Bairro br
-            INNER JOIN Cidade cd ON cd.id = br.cidade_id
-            INNER JOIN Estado es ON es.sigla = cd.estado_id
-            
-            ORDER BY es.nome, cd.nome, br.nome
-        '''
-        # usa o cursor para executar o SQL
-        #excuta uma consulta sql
-        cursor.execute(sql)
-        # obtem todos os registros retornados
-        #fetchall retorna todos os registros de uma tabela
-        registros = cursor.fetchall()
-
-        # define a pagina a ser carregada, adicionando os registros das tabelas 
-        return render(request, template, context={'registros': registros})
-    
-    # se ocorreu algunm erro, insere a mensagem para ser exibida no contexto da página 
-    except Exception as err:
-        return render(request, template, context={'ERRO': err})
-
-
-def exercicio_4(request):
-    # define a página HTML (template) que deverá será carregada
-    template = 'exercicio_4.html'
-    try:
-        # obtem a conexao com o BD
-        conexao = obter_conexao()
-
-        # define um cursor para executar comandos SQL
-        #cursor realiza comandos SQL e retornam para o código
-        cursor = conexao.cursor()
-
-        # define o comando SQL que será executado
-        sql = '''
-            SELECT fab.descricao AS fabricante,
-                    mod.descricao AS modelo,
-                    car.ano_fabricacao AS ano,
-                    car.cor,
-                    car.placa,
-                    car.preco,
-                    cat.descricao AS categoria
-            FROM Carro as car
-            INNER JOIN Categoria as cat ON cat.id = car.categoria_id
-            INNER JOIN Modelo as mod ON mod.id = car.modelo_id
-            INNER JOIN Fabricante as fab ON fab.id = mod.fabricante_id
-
-            ORDER BY fab.descricao, mod.descricao, car.ano_fabricacao
-        '''
-        # usa o cursor para executar o SQL
-        #excuta uma consulta sql
-        cursor.execute(sql)
-        # obtem todos os registros retornados
-        #fetchall retorna todos os registros de uma tabela
-        registros = cursor.fetchall()
-
-        # define a pagina a ser carregada, adicionando os registros das tabelas 
-        return render(request, template, context={'registros': registros})
-    
-    # se ocorreu algunm erro, insere a mensagem para ser exibida no contexto da página 
-    except Exception as err:
-        return render(request, template, context={'ERRO': err})
 
