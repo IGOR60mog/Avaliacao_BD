@@ -7,7 +7,7 @@ def obter_conexao():
     # define os parametros de conexao
     driver   = '{ODBC Driver 17 for SQL Server}'
     servidor = '.\SQLEXPRESS'
-    banco    = 'Aulas_BD'
+    banco    = 'Avaliacao_2bim'
     usuario  = 'sa'
     senha    = 'Senha@123' # poder ser também: "senha", "senha@123", "Senha@123" se for no lab06 "12345"
 
@@ -37,16 +37,14 @@ def questao_3a(request):
 
         # define o comando SQL que será executado
         sql = '''
-            SELECT  dep.nome as 'departamento',
-                    fun.nome, 
-                    fun.telefones
-
-            FROM Funcionario fun
-            INNER JOIN Departamento dep ON dep.id = fun.departamento_id
-
-            ORDER BY dep.nome, fun.nome
+            SELECT	Produto.descricao,
+		            Produto.valor_unitario,
+		            Categoria.descricao AS descricao_categoria
+            FROM Produto
+            INNER JOIN Categoria ON Produto.categoria_id = Categoria.id
+            
+            ORDER BY Categoria.descricao, Produto.descricao
         '''
-        sql = 'SELECT * from Funcionario'
         # usa o cursor para executar o SQL
         #excuta uma consulta sql
         cursor.execute(sql)
@@ -75,14 +73,18 @@ def questao_3b(request):
 
         # define o comando SQL que será executado
         sql = '''
-            SELECT  tur.nome as 'Nome da Turma',
-                    alu.nome as 'Nome do Aluno',
-                    alu.idade
+           SELECT   Venda.data_venda,
+                    Venda.valor_total,
+                    Produto.descricao AS descricao_produto,
+                    Cliente.nome AS nome_cliente,
+                    Vendedor.nome AS nome_vendedor
+                    
+            FROM Venda
+            INNER JOIN Produto ON Venda.produto_id = Produto.id
+            INNER JOIN Cliente ON Venda.cliente_id = Cliente.id
+            INNER JOIN Vendedor ON Venda.vendedor_id = Vendedor.id
 
-            FROM Aluno alu
-            INNER JOIN Turma tur ON tur.id = alu.turma_id
-
-            ORDER BY tur.nome, alu.nome
+            ORDER BY Venda.data_venda DESC
         '''
         # usa o cursor para executar o SQL
         #excuta uma consulta sql
