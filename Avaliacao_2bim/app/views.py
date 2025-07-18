@@ -38,9 +38,9 @@ def questao_3a(request):
         # define o comando SQL que será executado
         sql = '''
             SELECT	Produto.id,
-                    Produto.descricao,
-		            Produto.valor_unitario,
-		            Categoria.descricao AS descricao_categoria
+                    	Produto.descricao,
+		        Produto.valor_unitario,
+		        Categoria.descricao AS descricao_categoria
                     
             FROM Produto
             INNER JOIN Categoria ON Produto.categoria_id = Categoria.id
