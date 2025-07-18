@@ -41,6 +41,7 @@ def questao_3a(request):
                     Produto.descricao,
 		            Produto.valor_unitario,
 		            Categoria.descricao AS descricao_categoria
+                    
             FROM Produto
             INNER JOIN Categoria ON Produto.categoria_id = Categoria.id
             
