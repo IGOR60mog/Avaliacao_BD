@@ -1,0 +1,138 @@
+CREATE TABLE Categoria(
+    id INT IDENTITY(1,1) NOT NULL,
+    descricao VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id)
+)
+
+
+INSERT INTO Categoria(descricao) VALUES('Monitor')
+INSERT INTO Categoria(descricao) VALUES('Processador')
+
+
+SELECT *
+FROM Categoria
+
+
+CREATE TABLE Cliente(
+    id INT IDENTITY(1,1) NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    telefones VARCHAR(20) NULL,
+    PRIMARY KEY (id)
+)
+
+
+
+INSERT INTO Cliente(nome, telefones) VALUES('João da Silva', '4444-5555')
+INSERT INTO Cliente(nome, telefones) VALUES('Maria José', '3333-2222')
+INSERT INTO Cliente(nome, telefones) VALUES('José Maria', '1111-9999')
+
+
+SELECT *
+FROM Cliente
+
+
+
+CREATE TABLE Produto(
+    id INT IDENTITY(1,1) NOT NULL,
+    descricao VARCHAR(80) NOT NULL,
+    valor_unitario NUMERIC(10,2) NOT NULL,
+    categoria_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (categoria_id) REFERENCES Categoria(id)
+)
+
+
+
+INSERT INTO Produto(descricao, valor_unitario, categoria_id) VALUES('Samsung 22 polegadas', 235.00, 1)
+INSERT INTO Produto(descricao, valor_unitario, categoria_id) VALUES('Samsung 26 polegadas', 325.00, 1)
+INSERT INTO Produto(descricao, valor_unitario, categoria_id) VALUES('LG 22 polegadas', 244.90, 1)
+INSERT INTO Produto(descricao, valor_unitario, categoria_id) VALUES('LG 26 polegadas', 385.50, 1)
+INSERT INTO Produto(descricao, valor_unitario, categoria_id) VALUES('Intel i3', 590.00, 2)
+INSERT INTO Produto(descricao, valor_unitario, categoria_id) VALUES('Intel i5', 690.00, 2)
+INSERT INTO Produto(descricao, valor_unitario, categoria_id) VALUES('Intel i7', 790.00, 2)
+INSERT INTO Produto(descricao, valor_unitario, categoria_id) VALUES('AMD 2,7GHZ', 495.50, 2)
+INSERT INTO Produto(descricao, valor_unitario, categoria_id) VALUES('AMD 3,5GHZ', 788.00, 2)
+
+
+
+
+SELECT *
+FROM Produto
+
+
+CREATE TABLE Vendedor(
+    id INT IDENTITY(1,1) NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id)
+)
+
+
+INSERT INTO Vendedor(nome) VALUES('Adriano da Silva')
+INSERT INTO Vendedor(nome) VALUES('Joana Pereira')
+INSERT INTO Vendedor(nome) VALUES('Meire Moura')
+
+
+SELECT *
+FROM Vendedor
+
+
+CREATE TABLE Venda(
+    id INT IDENTITY(1,1) NOT NULL,
+    data_venda DATE NOT NULL,
+    cliente_id INT NOT NULL,
+    vendedor_id INT NOT NULL,
+    produto_id INT NOT NULL,
+    quantidade_produto INT NOT NULL,
+    valor_total NUMERIC(10,2) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (cliente_id) REFERENCES Cliente(id),
+    FOREIGN KEY (vendedor_id) REFERENCES Vendedor(id),
+    FOREIGN KEY (produto_id) REFERENCES Produto(id)
+)
+
+
+
+INSERT INTO Venda(data_venda, cliente_id, vendedor_id, produto_id, quantidade_produto, valor_total) VALUES('2025-01-01', 1, 1, 1, 1, 235.00)
+INSERT INTO Venda(data_venda, cliente_id, vendedor_id, produto_id, quantidade_produto, valor_total) VALUES('2025-01-11', 2, 2, 2, 2, 650.00)
+INSERT INTO Venda(data_venda, cliente_id, vendedor_id, produto_id, quantidade_produto, valor_total) VALUES('2025-01-21', 3, 1, 3, 1, 244.90)
+INSERT INTO Venda(data_venda, cliente_id, vendedor_id, produto_id, quantidade_produto, valor_total) VALUES('2025-01-31', 3, 2, 4, 1, 385.50)
+INSERT INTO Venda(data_venda, cliente_id, vendedor_id, produto_id, quantidade_produto, valor_total) VALUES('2025-02-01', 1, 3, 5, 3, 1770.00)
+INSERT INTO Venda(data_venda, cliente_id, vendedor_id, produto_id, quantidade_produto, valor_total) VALUES('2025-02-15', 2, 1, 6, 4, 2760.00)
+INSERT INTO Venda(data_venda, cliente_id, vendedor_id, produto_id, quantidade_produto, valor_total) VALUES('2025-03-01', 1, 3, 7, 6, 4740.00)
+INSERT INTO Venda(data_venda, cliente_id, vendedor_id, produto_id, quantidade_produto, valor_total) VALUES('2025-03-22', 2, 3, 8, 1, 495.50)
+INSERT INTO Venda(data_venda, cliente_id, vendedor_id, produto_id, quantidade_produto, valor_total) VALUES('2025-03-31', 1, 2, 9, 1, 788.00)
+
+
+
+
+SELECT *
+FROM Venda
+
+
+
+
+SELECT 
+    Produto.*,
+    Categoria.descricao AS descricao_categoria
+FROM 
+    Produto
+INNER JOIN 
+    Categoria ON Produto.categoria_id = Categoria.id
+ORDER BY 
+    Categoria.descricao, Produto.descricao
+
+
+
+SELECT 
+    Venda.data_venda,
+    Venda.valor_total,
+    Produto.descricao AS descricao_produto,
+    Cliente.nome AS nome_cliente,
+    Vendedor.nome AS nome_vendedor
+FROM 
+    Venda
+INNER JOIN Produto ON Venda.produto_id = Produto.id
+INNER JOIN Cliente ON Venda.cliente_id = Cliente.id
+INNER JOIN Vendedor ON Venda.vendedor_id = Vendedor.id
+ORDER BY 
+    Venda.data_venda DESC
